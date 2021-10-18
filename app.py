@@ -4,35 +4,35 @@ import json
 
 app = Flask(__name__)
 
-receitas = [
+ListaReceitas = [
     {
-        "Título": "Bolo01",
+        "Título": "Bolo",
         "Lista de ingredientes": [
-            "ingrediente01"
-            "ingrediente02"
-            "ingrediente03"
+            "Manteiga"
+            "2 ovos"
+            "Trigo"
         ],
-        "modo": "modo01",
-        "Redimento": "Redimento01"
+        "modo": "para preparar, basta ligar o forno e colocar o bolo.",
+        "Redimento": "Rende 3 fatias."
     },
 ]
-@app.route("/cadastro", methods=["POST","GET"])
+@app.route("/rotaApiRest", methods=["POST","GET"])
 def Cadastro():
     if request.method == "GET":
-        return jsonify(receitas)
+        return jsonify(ListaReceitas)
     elif request.method == "POST":
         newcadastro = json.loads(request.data)
-        receitas.append(newcadastro)
+        ListaReceitas.append(newcadastro)
         return jsonify({
             "menssagem" : "Cadastrado",
             "newValue": newcadastro
 
         }) 
    
-@app.route('/cadastro/<int:indice>', methods=['GET', 'PUT', 'DELETE'])
+@app.route('/rotaApiRest/<int:indice>', methods=['GET', 'PUT', 'DELETE'])
 def cadastroID(indice):
     try:
-        receitas[indice]
+        ListaReceitas[indice]
     except IndexError:
         message = 'Receita ID {} Não Encontrada'.format(indice)
         return jsonify({
@@ -47,23 +47,23 @@ def cadastroID(indice):
         })
     
     if request.method == 'GET':
-        return receitas[indice]
+        return ListaReceitas[indice]
 
     elif request.method == 'PUT':
        
         newValue = json.loads(request.data)
 
-        receitas[indice] = newValue
+        ListaReceitas[indice] = newValue
         return jsonify({
             "message": "Updated!",
             "newValue": newValue
         })
     elif request.method == 'DELETE':
         print(indice)
-        receitas.pop(indice)
+        ListaReceitas.pop(indice)
         return jsonify({
             "message": "Deleted!",
-            "arrayAtual": receitas
+            "arrayAtual": ListaReceitas
         })
 
 if __name__ == '__main__':
